@@ -23,13 +23,17 @@ struct ContentView: View {
     }
     
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: gridSizeFor(count: emojis.count)))]) {
             ForEach(emojis.indices, id: \.self) { index in
                 CardView(content: emojis[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
         .foregroundColor(.orange)
+    }
+    
+    func gridSizeFor(count: Int) -> CGFloat {
+        count < 32 ? 65.0 : 50.0
     }
     
     func themeChoosingButton(emojis content: Array<String>, title: String, symbol: String) -> some View {
