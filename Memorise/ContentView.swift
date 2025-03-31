@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State var emojis: Array<String> = []
+    @State var themeColor: Color = Color(.white)
     
     var body: some View {
         VStack {
@@ -29,16 +30,17 @@ struct ContentView: View {
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
-        .foregroundColor(.orange)
+        .foregroundColor(themeColor)
     }
     
     func gridSizeFor(count: Int) -> CGFloat {
         count < 32 ? 65.0 : 50.0
     }
     
-    func themeChoosingButton(emojis content: Array<String>, title: String, symbol: String) -> some View {
+    func themeChoosingButton(emojis content: Array<String>, title: String, symbol: String, color: Color) -> some View {
         Button(action: {
             emojis = [content, content].flatMap( { $0 } ).shuffled()
+            themeColor = color
         }, label: {
             VStack {
                 Image(systemName: symbol).font(.largeTitle)
@@ -50,11 +52,11 @@ struct ContentView: View {
     var themeChoosingButtons: some View {
         HStack(alignment: .lastTextBaseline) {
             Spacer()
-            themeChoosingButton(emojis: ["👻", "🎃", "🕷️", "😈", "💀", "🕸️", "🧙", "🙀", "👹", "😱", "☠️", "🍭"], title: "Halloween", symbol: "brain.fill")
+            themeChoosingButton(emojis: ["👻", "🎃", "🕷️", "😈", "💀", "🕸️", "🧙", "🙀", "👹", "😱", "☠️", "🍭"], title: "Halloween", symbol: "brain.fill", color: .orange)
             Spacer()
-            themeChoosingButton(emojis: ["✈️", "🚗", "🚀", "🚘", "🚙", "🚎", "🚛", "🚕", "🚐", "🚁", "🚜", "⛵️", "🚒", "🏎️", "🏍️", "🚔"], title: "Vehicles", symbol: "car.fill")
+            themeChoosingButton(emojis: ["✈️", "🚗", "🚀", "🚘", "🚙", "🚎", "🚛", "🚕", "🚐", "🚁", "🚜", "⛵️", "🚒", "🏎️", "🏍️", "🚔"], title: "Vehicles", symbol: "car.fill", color: .red)
             Spacer()
-            themeChoosingButton(emojis: ["🐱", "🐈", "🐶", "🐿️", "🦊", "🐷", "🐮", "🐼", "🦆", "🦦"], title: "Animals", symbol: "pawprint.fill")
+            themeChoosingButton(emojis: ["🐱", "🐈", "🐶", "🐿️", "🦊", "🐷", "🐮", "🐼", "🦆", "🦦"], title: "Animals", symbol: "pawprint.fill", color: .green)
             Spacer()
         }
     }
