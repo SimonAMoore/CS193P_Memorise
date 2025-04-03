@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct EmojiMemoryGameView: View {
-    var viewModel: EmojiMemoryGame
-    
-    let emojis: Array<String> = ["👻", "🎃", "🕷️", "😈", "💀", "🕸️", "🧙", "🙀", "👹", "😱", "☠️", "🍭"]
+    var viewModel: EmojiMemoryGame = EmojiMemoryGame() // BAD!!!!!
     
     var body: some View {
         ScrollView {
@@ -21,8 +19,8 @@ struct EmojiMemoryGameView: View {
     
     var cards: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
-            ForEach(emojis.indices, id: \.self) { index in
-                CardView(content: emojis[index])
+            ForEach(viewModel.cards.indices, id: \.self) { index in
+                CardView(viewModel.cards[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
@@ -30,28 +28,24 @@ struct EmojiMemoryGameView: View {
     }
     
     struct CardView: View {
-        @State var isFaceUp = false
+        let card: MemoryGame<String>.Card
         
-        var cornerRadius    = 16.0
-        var lineWidth       = 4.0
-        
-        let content: String
+        init(_ card: MemoryGame<String>.Card) {
+            self.card = card
+        }
         
         var body: some View {
             ZStack {
-                let base = RoundedRectangle(cornerRadius: cornerRadius)
+                let base = RoundedRectangle(cornerRadius: 16)
                 
                 Group {
                     base.fill(.white)
-                    base.strokeBorder(lineWidth: lineWidth)
-                    Text(content).font(.largeTitle)
+                    base.strokeBorder(lineWidth: 4)
+                    Text(card.content).font(.largeTitle)
                 }
-                .opacity(isFaceUp ? 1 : 0)
+                .opacity(card.isFaceUp ? 1 : 0)
                 
-                base.fill().opacity(isFaceUp ? 0 : 1)
-            }
-            .onTapGesture {
-                isFaceUp.toggle()
+                base.fill().opacity(card.isFaceUp ? 0 : 1)
             }
         }
     }
