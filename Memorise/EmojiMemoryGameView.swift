@@ -12,11 +12,13 @@ struct EmojiMemoryGameView: View {
     
     var body: some View {
         VStack {
+            Text("Memorise!").font(.largeTitle)
+            Text(viewModel.themeTitle).font(.title)
             ScrollView {
                 cards.animation(.default, value: viewModel.cards)
             }
-            Button("Shuffle") {
-                viewModel.shuffle()
+            Button("New Game") {
+                viewModel.newGame()
             }
         }
         .padding()
@@ -28,12 +30,10 @@ struct EmojiMemoryGameView: View {
                 CardView(card)
                     .aspectRatio(2/3, contentMode: .fit)
                     .padding(4)
-                    .onTapGesture {
-                        viewModel.choose(card)
-                    }
+                    .onTapGesture { viewModel.choose(card) }
             }
         }
-        //.foregroundColor(.orange)
+        .foregroundColor(viewModel.themeColor)
     }
     
     struct CardView: View {
@@ -60,7 +60,6 @@ struct EmojiMemoryGameView: View {
                 base.fill().opacity(card.isFaceUp ? 0 : 1)
             }
             .opacity((card.isMatched ? 0 : 1))
-            .foregroundColor(.orange)
         }
     }
 }
