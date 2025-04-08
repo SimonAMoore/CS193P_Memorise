@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct MemoryGameTheme<ThemeContent> {
+struct MemoryGameTheme<ThemeContent:Equatable>: Equatable {
     let name: String
-    let emojis: Array<ThemeContent>
+    let contents: Array<ThemeContent>
     let numberOfPairs: Int
     let color: String
 }

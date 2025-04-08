@@ -2,55 +2,61 @@
 //  EmojiMemoryGameThemes.swift
 //  Memorise
 //
-//  Created by Simon Moore on 05/04/2025.
+//  Created by Simon Moore on 08/04/2025.
 //
 
 import Foundation
 
 struct EmojiMemoryGameThemes {
-    private var themes: [MemoryGameTheme<String>] = []
-    private var currentThemeIndex: Int
+    private static var content = [MemoryGameTheme<String>]()
     
-    init() {
-        themes.append(MemoryGameTheme(name: "Sports",
-                                           emojis: ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🎱", "🥊"],
-                                           numberOfPairs: 8,
-                                           color: "yellow"))
+    private static func initialise() {
+        content.append(MemoryGameTheme(name: "Sports",
+                                       contents: ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🎱", "🥊"],
+                                       numberOfPairs: 8,
+                                       color: "yellow"))
         
-        themes.append(MemoryGameTheme(name: "Animals",
-                                           emojis: ["🐶", "🐱", "🐭", "🐰", "🦊", "🦁", "🐸", "🐷", "🐻", "🐨","🦆","🙉"],
-                                           numberOfPairs: 10,
-                                           color: "mint"))
+        content.append(MemoryGameTheme(name: "Animals",
+                                       contents: ["🐶", "🐱", "🐭", "🐰", "🦊", "🦁", "🐸", "🐷", "🐻", "🐨","🦆","🙉"],
+                                       numberOfPairs: 10,
+                                       color: "mint"))
         
-        themes.append(MemoryGameTheme(name: "Halloween",
-                                           emojis: ["👻", "🎃", "🕷️", "😈", "💀", "🕸️", "🧙", "🙀", "👹", "😱", "☠️", "🍭"],
-                                           numberOfPairs: 12,
-                                           color: "orange"))
+        content.append(MemoryGameTheme(name: "Halloween",
+                                       contents: ["👻", "🎃", "🕷️", "😈", "💀", "🕸️", "🧙", "🙀", "👹", "😱", "☠️", "🍭"],
+                                       numberOfPairs: 10,
+                                       color: "orange"))
         
-        themes.append(MemoryGameTheme(name: "Vehicles",
-                                           emojis: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜","✈️","🛵","🏍️","⛵️"],
-                                           numberOfPairs: 14,
-                                           color: "indigo"))
-
-        themes.append(MemoryGameTheme(name: "Emojis",
-                                           emojis: ["😀", "😁", "😆", "🥹", "😅", "😂", "🤣", "🥲", "☺️", "😇", "🙃", "😉", "😍", "😘", "😝", "😎", "🥸", "🤩", "🥳", "🤯", "🥶", "🥵", "🤮", "🤕"],
-                                           numberOfPairs: 16,
-                                           color: "purple"))
-
-        themes.append(MemoryGameTheme(name: "Food",
-                                           emojis: ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍒", "🍑", "🥥", "🥑", "🥦", "🥒", "🧄", "🧅", "🥐", "🥨", "🧀", "🍕", "🥚", "🌭"],
-                                           numberOfPairs: 18,
-                                           color: "teal"))
+        content.append(MemoryGameTheme(name: "Vehicles",
+                                       contents: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜","✈️","🛵","🏍️","⛵️"],
+                                       numberOfPairs: 15,
+                                       color: "indigo"))
         
-        currentThemeIndex = 0
+        content.append(MemoryGameTheme(name: "Emojis",
+                                       contents: ["😀", "😁", "😆", "🥹", "😅", "😂", "🤣", "🥲", "☺️", "😇", "🙃", "😉", "😍", "😘", "😝", "😎", "🥸", "🤩", "🥳", "🤯", "🥶", "🥵", "🤮", "🤕"],
+                                       numberOfPairs: 15,
+                                       color: "purple"))
+        
+        content.append(MemoryGameTheme(name: "Food",
+                                       contents: ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍒", "🍑", "🥥", "🥑", "🥦", "🥒", "🧄", "🧅", "🥐", "🥨", "🧀", "🍕", "🥚", "🌭"],
+                                       numberOfPairs: 18,
+                                       color: "teal"))
+        
     }
     
-    var currentTheme: MemoryGameTheme<String> {
-        themes[currentThemeIndex]
+    private static func getContentAtIndex(_ index: Int) -> MemoryGameTheme<String> {
+        if (content.count == 0) { initialise() }
+        return content[index]
     }
     
-    mutating func randomTheme() -> MemoryGameTheme<String> {
-        currentThemeIndex = Int.random(in: themes.indices)
-        return themes[currentThemeIndex]
+    static func firstTheme() -> MemoryGameTheme<String> {
+        getContentAtIndex(0)
+    }
+    
+    static func randomTheme() -> MemoryGameTheme<String> {
+        getContentAtIndex(Int.random(in: content.indices))
+    }
+    
+    static func add(_ theme: MemoryGameTheme<String>) {
+        content.append(theme)
     }
 }

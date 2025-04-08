@@ -17,15 +17,21 @@ struct EmojiMemoryGameView: View {
             ScrollView {
                 cards.animation(.default, value: viewModel.cards)
             }
-            Button("New Game") {
-                viewModel.newGame()
+            HStack {
+                Spacer()
+                Text("Score: \(viewModel.score)")
+                Spacer()
+                Button("New Game") {
+                    viewModel.newGame()
+                }
+                Spacer()
             }
         }
         .padding()
     }
     
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 65), spacing: 0)], spacing: 0) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: gridItemSizeFor(viewModel.cards.count)), spacing: 0)], spacing: 0) {
             ForEach(viewModel.cards) { card in
                 CardView(card)
                     .aspectRatio(2/3, contentMode: .fit)
@@ -34,6 +40,16 @@ struct EmojiMemoryGameView: View {
             }
         }
         .foregroundColor(viewModel.themeColor)
+    }
+    
+    func gridItemSizeFor(_ count: Int) -> CGFloat {
+        if (count < 17) {
+            return 80
+        } else if (count < 25){
+            return 70
+        } else {
+            return 60
+        }
     }
     
     struct CardView: View {
@@ -55,11 +71,11 @@ struct EmojiMemoryGameView: View {
                         .aspectRatio(1, contentMode: .fit)
                     base.strokeBorder(lineWidth: 4)
                 }
-                .opacity(card.isFaceUp ? 1 : 0)
+                .opacity(card.isActive ? 1 : 0)
                 
-                base.fill().opacity(card.isFaceUp ? 0 : 1)
+                base.fill().opacity(card.isActive ? 0 : 1)
             }
-            .opacity((card.isMatched ? 0 : 1))
+            .opacity((card.isMatched ? 0.25 : 1))
         }
     }
 }

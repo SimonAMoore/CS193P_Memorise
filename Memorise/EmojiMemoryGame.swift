@@ -9,22 +9,20 @@ import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
     private static func createMemoryGameWith(_ theme: MemoryGameTheme<String>) -> MemoryGame<String> {
-        MemoryGame(numberOfPairsOfCards: theme.numberOfPairs) { pairIndex in
-            var emoji = "⁉️"
-            if theme.emojis.indices.contains(pairIndex) {
-                emoji = theme.emojis[pairIndex]
-            }
-            return emoji
+        MemoryGame(numberOfPairsOfCards: theme.numberOfPairs, from: theme.contents.count) { pairIndex in
+                theme.contents[pairIndex]
         }
     }
     
-    private var emojiThemes = EmojiMemoryGameThemes()
+    private let emojiThemes = EmojiMemoryGameThemes()
+    private var theme: MemoryGameTheme<String>
     
     @Published private var model: MemoryGame<String>
 
     init() {
-        model = EmojiMemoryGame.createMemoryGameWith(emojiThemes.currentTheme)
-        model.shuffle()
+        theme = EmojiMemoryGameThemes.firstTheme()
+        model = Self.createMemoryGameWith(theme)
+        model.newGame()
     }
     
     var cards: [MemoryGame<String>.Card] {
@@ -32,11 +30,11 @@ class EmojiMemoryGame: ObservableObject {
     }
     
     var themeTitle: String {
-        emojiThemes.currentTheme.name
+        return theme.name
     }
     
     var themeColor: Color {
-        switch emojiThemes.currentTheme.color.lowercased() {
+        switch theme.color.lowercased() {
         case "red":
             return .red
         case "green":
@@ -66,6 +64,10 @@ class EmojiMemoryGame: ObservableObject {
         }
     }
     
+    var score: Int {
+        model.score
+    }
+    
     // MARK: - Intents
     
     func shuffle() {
@@ -77,7 +79,8 @@ class EmojiMemoryGame: ObservableObject {
     }
     
     func newGame() {
-        model = EmojiMemoryGame.createMemoryGameWith(emojiThemes.randomTheme())
-        model.shuffle()
+        theme = EmojiMemoryGameThemes.randomTheme()
+        model = EmojiMemoryGame.createMemoryGameWith(theme)
+        model.newGame()
     }
 }
