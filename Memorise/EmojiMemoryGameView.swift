@@ -13,10 +13,10 @@ struct EmojiMemoryGameView: View {
     var body: some View {
         VStack {
             Text("Memorise!").font(.largeTitle)
-            Text(viewModel.themeTitle).font(.title)
-            ScrollView {
-                cards.animation(.default, value: viewModel.cards)
-            }
+            Text(viewModel.title).font(.title)
+            cards.animation(.default, value: viewModel.cards)
+                .foregroundColor(viewModel.color)
+            Spacer()
             HStack {
                 Spacer()
                 Text("Score: \(viewModel.score)")
@@ -30,54 +30,16 @@ struct EmojiMemoryGameView: View {
         .padding()
     }
     
-    var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: gridItemSizeFor(viewModel.cards.count)), spacing: 0)], spacing: 0) {
-            ForEach(viewModel.cards) { card in
-                CardView(card)
-                    .aspectRatio(2/3, contentMode: .fit)
-                    .padding(4)
-                    .onTapGesture { viewModel.choose(card) }
-            }
-        }
-        .foregroundColor(viewModel.themeColor)
-    }
-    
-    func gridItemSizeFor(_ count: Int) -> CGFloat {
-        if (count < 17) {
-            return 80
-        } else if (count < 25){
-            return 70
-        } else {
-            return 60
+    private var cards: some View {
+        AspectVGrid(viewModel.cards, aspectRatio: aspectRatio) { card in
+            CardView(card)
+                .padding(spacing)
+                .onTapGesture { viewModel.choose(card) }
         }
     }
     
-    struct CardView: View {
-        let card: MemoryGame<String>.Card
-        
-        init(_ card: MemoryGame<String>.Card) {
-            self.card = card
-        }
-        
-        var body: some View {
-            ZStack {
-                let base = RoundedRectangle(cornerRadius: 16)
-                
-                Group {
-                    base.fill(.white)
-                    Text(card.content)
-                        .font(.system(size: 200))
-                        .minimumScaleFactor(0.01)
-                        .aspectRatio(1, contentMode: .fit)
-                    base.strokeBorder(lineWidth: 4)
-                }
-                .opacity(card.isActive ? 1 : 0)
-                
-                base.fill().opacity(card.isActive ? 0 : 1)
-            }
-            .opacity((card.isMatched ? 0.25 : 1))
-        }
-    }
+    private let aspectRatio: CGFloat = 2/3
+    private let spacing: CGFloat = 4
 }
 
 #Preview {

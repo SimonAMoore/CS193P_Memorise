@@ -15,13 +15,13 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         set { cards.indices.forEach { cards[$0].isFaceUp = (newValue == $0) } }
     }
     
-    init(numberOfPairsOfCards: Int, from: Int, cardContentFactory: (Int) -> CardContent) {
+    init(choosePairsOfCards: Int, fromPairsOfCards: Int, cardContent: (Int) -> CardContent) {
         cards = []
         
-        let numbersToChooseFrom = Set(0..<from).shuffled()
+        let numbersToChooseFrom = Set(0..<fromPairsOfCards).shuffled()
         
-        for pairIndex in 0..<max(2, numberOfPairsOfCards) {
-            let content = cardContentFactory(numbersToChooseFrom[pairIndex])
+        for pairIndex in 0..<max(2, choosePairsOfCards) {
+            let content = cardContent(numbersToChooseFrom[pairIndex])
             cards.append(Card(content: content, id: "\(pairIndex + 1)a"))
             cards.append(Card(content: content, id: "\(pairIndex + 1)b"))
         }
@@ -60,6 +60,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
             cards[$0].isSeen = false
         }
         shuffle()
+        score = 0
     }
     
     private(set) var score: Int = 0
@@ -68,11 +69,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         var isFaceUp = false
         var isMatched = false
         var isSeen = false
+        
         let content: CardContent
-        
         let id: String
-        var debugDescription: String { "[\(id): '\(content)': Face \(isFaceUp ? "up" : "down"), \(isSeen ? "been seen" : "not seen"), \(isMatched ? "is" : "is not") matched.] " }
         
+        var debugDescription: String { "[\(id): '\(content)': Face \(isFaceUp ? "up" : "down"), \(isSeen ? "been seen" : "not seen"), \(isMatched ? "is" : "is not") matched.] " }
         var isFaceDown: Bool { !isFaceUp }
         var isNotMatched: Bool { !isMatched }
         var isActive: Bool { isFaceUp || isMatched }
