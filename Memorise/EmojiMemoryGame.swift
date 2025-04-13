@@ -11,10 +11,10 @@ class EmojiMemoryGame: ObservableObject {
     typealias Card = MemoryGame<String>.Card
 
     private static func createMemoryGameWith(_ theme: MemoryGameTheme<String>) -> MemoryGame<String> {
-        MemoryGame(choosePairsOfCards: 2, fromPairsOfCards: theme.contents.count) { pairIndex in
-            theme.contents[pairIndex]
-        //    MemoryGame(choosePairsOfCards: theme.numberOfPairs, fromPairsOfCards: theme.contents.count) { pairIndex in
-        //        theme.contents[pairIndex]
+        //MemoryGame(choosePairsOfCards: 2, fromPairsOfCards: theme.contents.count) { pairIndex in
+        //    theme.contents[pairIndex]
+            MemoryGame(choosePairsOfCards: theme.numberOfPairs, fromPairsOfCards: theme.contents.count) { pairIndex in
+                theme.contents[pairIndex]
             }
         }
     

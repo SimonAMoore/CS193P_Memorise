@@ -17,62 +17,49 @@ struct CardView: View {
     }
         
     var body: some View {
-        ZStack {
-            let base = RoundedRectangle(cornerRadius: Constants.cornerRadius)
-            
-            Group {
-                base.fill(.white)
-                Pie(endAngle: .degrees(240))
-                    .opacity(Constants.Pie.opacity)
-                    .overlay(
-                        Text(card.content)
-                            .font(.system(size: Constants.FontSize.largest))
-                            .minimumScaleFactor(Constants.FontSize.scaleFactor)
-                            .multilineTextAlignment(.center)
-                            .aspectRatio(1, contentMode: .fit)
-                            .padding(Constants.Pie.inset)
-                    )
-                    .padding(Constants.inset)
-                base.strokeBorder(lineWidth: Constants.lineWidth)
-            }
-            .opacity(card.isActive ? 1 : 0)
-            
-            base.fill().opacity(card.isActive ? 0 : 1)
-        }
-        .opacity((card.isMatched ? Constants.matchedOpacity : 1))
+        Pie(endAngle: .degrees(240))
+            .opacity(Constants.Pie.opacity)
+            .overlay(
+                Text(card.content)
+                    .font(.system(size: Constants.FontSize.largest))
+                    .minimumScaleFactor(Constants.FontSize.scaleFactor)
+                    .multilineTextAlignment(.center)
+                    .aspectRatio(1, contentMode: .fit)
+                    .padding(Constants.Pie.inset)
+            )
+            .padding(Constants.inset)
+            .cardify(isActive: card.isActive)
+            .opacity((card.isMatched ? Constants.matchedOpacity : 1))
     }
     
     private struct Constants {
-        static let cornerRadius: CGFloat = 16
-        static let lineWidth: CGFloat = 4
-        static let inset: CGFloat = 12
+        static let inset: CGFloat = 4
+        static let matchedOpacity: CGFloat = 0.25
+
         struct FontSize {
             static let largest: CGFloat = 200
             static let smallest: CGFloat = 10
             static let scaleFactor = smallest / largest
         }
-        static let matchedOpacity: CGFloat = 0.25
+
         struct Pie {
             static let opacity: CGFloat = 0.4
-            static let inset: CGFloat = 8
+            static let inset: CGFloat = 4
         }
     }
 }
 
 #Preview {
-    typealias Card = CardView.Card
-
-    return VStack {
+    VStack {
         HStack {
-            CardView(Card(isFaceUp: true, content: "X", id: "test1"))
-            CardView(Card(isFaceUp: true, content: "X", id: "test2"))
+            CardView(CardView.Card(isFaceUp: true, content: "X", id: "test1"))
+            CardView(CardView.Card(isFaceUp: true, content: "X", id: "test2"))
         }
         HStack {
-            CardView(Card(isFaceUp: true, content: "This is a very long string so I hope it fits.", id: "test3"))
-            CardView(Card(isFaceUp: true, content: "X", id: "test4"))
+            CardView(CardView.Card(isFaceUp: true, content: "This is a very long string so I hope it fits.", id: "test3"))
+            CardView(CardView.Card(isFaceUp: true, content: "X", id: "test4"))
         }
     }
         .padding()
         .foregroundColor(.green)
 }
-
