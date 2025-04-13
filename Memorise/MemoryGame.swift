@@ -55,11 +55,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     
     mutating func newGame() {
         cards.indices.forEach {
-            cards[$0].isFaceUp = false
+            cards[$0].isFaceUp = true // false
             cards[$0].isMatched = false
             cards[$0].isSeen = false
         }
-        shuffle()
+        //shuffle()
         score = 0
     }
     

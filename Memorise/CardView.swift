@@ -22,11 +22,16 @@ struct CardView: View {
             
             Group {
                 base.fill(.white)
-                Text(card.content)
-                    .font(.system(size: Constants.FontSize.largest))
-                    .minimumScaleFactor(Constants.FontSize.scaleFactor)
-                    .multilineTextAlignment(.center)
-                    .aspectRatio(1, contentMode: .fit)
+                Pie(endAngle: .degrees(240))
+                    .opacity(Constants.Pie.opacity)
+                    .overlay(
+                        Text(card.content)
+                            .font(.system(size: Constants.FontSize.largest))
+                            .minimumScaleFactor(Constants.FontSize.scaleFactor)
+                            .multilineTextAlignment(.center)
+                            .aspectRatio(1, contentMode: .fit)
+                            .padding(Constants.Pie.inset)
+                    )
                     .padding(Constants.inset)
                 base.strokeBorder(lineWidth: Constants.lineWidth)
             }
@@ -40,13 +45,17 @@ struct CardView: View {
     private struct Constants {
         static let cornerRadius: CGFloat = 16
         static let lineWidth: CGFloat = 4
-        static let inset: CGFloat = 5
+        static let inset: CGFloat = 12
         struct FontSize {
             static let largest: CGFloat = 200
             static let smallest: CGFloat = 10
             static let scaleFactor = smallest / largest
         }
         static let matchedOpacity: CGFloat = 0.25
+        struct Pie {
+            static let opacity: CGFloat = 0.4
+            static let inset: CGFloat = 8
+        }
     }
 }
 
